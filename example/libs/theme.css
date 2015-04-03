@@ -1,0 +1,22 @@
+body{
+	margin:0;
+	padding:0;
+}
+
+.TickerNews.default_theme{
+	background-color: #f1f1f1;
+}
+
+.TickerNews.default_theme .ti_news a{
+	display: block;
+	margin-right: 10px;
+	color:#333;
+	text-transform: uppercase;
+	text-decoration: none;
+	font-family: geneva;
+}
+
+.TickerNews.default_theme .ti_news span{
+	color:red;
+	font-size: 110%;
+}
