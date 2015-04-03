@@ -9,7 +9,7 @@
 			},
 			itemWidth : "auto",
 			ticker : ".ti_news",
-			tickerColne : ".ti_clone",
+			tickerColne : "ti_clone",
 			wrapper : ".ti_wrapper",
 			slide : ".ti_slide",
 			content : ".ti_content",
