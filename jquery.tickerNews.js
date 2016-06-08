@@ -18,12 +18,16 @@
 				beforeLoad : function($Ticker){},
 				onLoad : function($current,$Ticker){},
 				beforeAnimation : function($old,$current){},
-				completeAnimation : function($old,$current){}
+				completeAnimation : function($old,$current){},
+				isPaused : function($current,$Ticker){},
+				isResumed : function($current,$Ticker){}
 			},
 
 			core : {
 				_getTime : function(w){
-					return opt.base.time * (w / opt.base.width);
+					baseMargin=(typeof $contentTickers === "undefined") ? 0 : $contentTickers.first().css("margin-left");
+					baseMargin=(baseMargin<0)?baseMargin:0;
+					return opt.base.time * (w / (baseMargin + opt.base.width));
 				},
 
 				_contentWidth : function($tickers){
@@ -42,6 +46,11 @@
 
 		$(this).each(function(){
 			var $Ticker = $(this);
+
+				$Ticker.data("ticker",{
+					stop:true,
+					animation:null
+				});
 
 			opt.callbacks.beforeLoad($(this));
 
@@ -75,8 +84,8 @@
 			$ti_slide.append($contentTicker.clone().addClass(opt.tickerColne));
 			$ti_slide.append($contentTicker.clone().addClass(opt.tickerColne));
 
-			$contentTickers = $Ticker.find(opt.content);
-			$contentTickers.width(width_content);
+			var $contentTickers = $Ticker.find(opt.content);
+				$contentTickers.width(width_content);
 
 			$current = $contentTickers.first();
 
@@ -89,8 +98,8 @@
 
 				opt.callbacks.beforeAnimation($old,$current);
 
-				this.stop = false;
-				this.tickerAnimation = $current.animate({
+				$Ticker.data("stop",false);
+				var tickerAnimation = $current.animate({
 					"margin-left" : -width_content,
 				},{
 					easing : "linear",
@@ -102,27 +111,44 @@
 						animateTicker.call($Ticker);
 					}
 				});
+				$Ticker.data("animation",tickerAnimation);
 			}
 
 			animateTicker.call(this);
+
+			$Ticker[0].pauseTicker = function(){
+				$Ticker.each(function(){
+					var _anim = $Ticker.data("animation"),
+						_stop = $Ticker.data("stop");
+					if(!!_stop || !_anim) return;
+					_anim.stop();
+					$Ticker.data("stop",true);
+					opt.callbacks.isPaused();
+				});
+			}
+
+			$Ticker[0].startTicker = function(){
+				$Ticker.each(function(){
+					if(!$Ticker.data("stop")) return;
+					animateTicker($Ticker);
+					$Ticker.data("stop",false);
+					opt.callbacks.isResumed();
+				});
+			}
 		});
 
 		return this;
 	};
 
-	$.fn.stopTicker = function(){
+	$.fn.newsTickerPause = function(){
 		$(this).each(function(){
-			if(this.stop) return;
-			this.tickerAnimation.stop();
-			this.stop = true;
+			if("pauseTicker" in $(this)[0]) $(this)[0].pauseTicker();
 		});
 	}
 
-	$.fn.startTicker = function(){
+	$.fn.newsTickerResume = function(){
 		$(this).each(function(){
-			if(!this.stop) return;
-			animateTicker($(this));
-			this.stop = false;
+			if("startTicker" in $(this)[0]) $(this)[0].startTicker();
 		});
 	}
 
