@@ -51,17 +51,23 @@
 			$contentTicker = $Ticker.find(opt.content);
 
 			var width_content = opt.core._contentWidth($notizieTicker),
-			wrapper_width = $wrapperTicker.width(),
-			$current,
-			$old = $();
+				wrapper_width = $wrapperTicker.width(),
+				$current,
+				$old = $();
 
 			if(width_content < wrapper_width){
 				var x = Math.ceil(width_content/wrapper_width);
 				for (var i = 0; i < x; i++) {
 					$contentTicker.append($contentTicker.children().clone());
 				}
-
-				width_content = ($contentTicker.children().length * opt.itemWidth);
+				if(!opt.itemWidth || opt.itemWidth == "auto"){
+					width_content = 0;
+					$contentTicker.children().each(function(){
+						width_content += $(this).width();
+					});
+				}else{
+					width_content = ($contentTicker.children().length * opt.itemWidth);
+				}
 			}
 
 			if(width_content * 3 > $ti_slide.width()) $ti_slide.width((width_content*3)+100);
@@ -76,12 +82,14 @@
 
 			opt.callbacks.onLoad($current,$(this));
 
-			var animateTicker = function(){
+			var animateTicker = function(m){
 				$ti_slide.append($old);
-				$old.css("margin-left",0);
+				var m = (typeof m == "undefined") ? 0 : m ; 
+				$old.css("margin-left",m);
 
 				opt.callbacks.beforeAnimation($old,$current);
 
+				this.stop = false;
 				this.tickerAnimation = $current.animate({
 					"margin-left" : -width_content,
 				},{
@@ -98,13 +106,23 @@
 
 			animateTicker.call(this);
 		});
-		
+
 		return this;
 	};
 
 	$.fn.stopTicker = function(){
 		$(this).each(function(){
+			if(this.stop) return;
 			this.tickerAnimation.stop();
+			this.stop = true;
+		});
+	}
+
+	$.fn.startTicker = function(){
+		$(this).each(function(){
+			if(!this.stop) return;
+			animateTicker($(this));
+			this.stop = false;
 		});
 	}
 
