@@ -52,12 +52,29 @@
 
 * ##### `callbacks` 
 	
+	+	**Definition** : an object of callbacks called each time a particolar event occurred.
 	+	**Value type** : `object`
 	+	**Derault** : 
 
 				{
+					//before a ticker load
 					beforeLoad : function($Ticker){},
+					//after a ticker load (with current element initialized)
 					onLoad : function($current,$Ticker){},
+					//before each animation start
 					beforeAnimation : function($old,$current){},
-					completeAnimation : function($old,$current){}
+					//after each animation end
+					completeAnimation : function($old,$current){},
+					//after each time a ticker is paused
+					isPaused : function($current,$Ticker){},
+					//after each time a ticker is resumed
+					isResumed : function($current,$Ticker){}
 				}
+
+## Pause and Remsume a ticker
+
+You can pause and resume a ticker by calling this two methods on an element or a group of element that have an instance of ticker inside.
+
+`$.fn.tickerNewsPause()`
+`$.fn.tickerNewsResume()`
+
