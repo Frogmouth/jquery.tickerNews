@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="Simple ticker News by Frogmout">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Simple Ticker News Pause / Resume</title>
+        <link rel="stylesheet" href="libs/style.css">
+        <link rel="stylesheet" href="libs/theme.css">
+		<style type="text/css">
+			#stop-resume{
+				display: block;
+				padding: 10px;
+				background-color: #f1f1f1;
+				margin:10px;
+				width: 70px;
+				text-align: center;
+				border:solid 1px white;
+				text-transform: uppercase;
+				font-family: sans-serif;
+				text-decoration: none;
+			}
+			#stop-resume:active{
+				background-color:white;
+				border:solid 1px #f1f1f1;
+				color:blue;
+			}
+		</style>
+    </head>
+    <body>
+        <div class="TickerNews" id="T1">
+		    <div class="ti_wrapper">
+		        <div class="ti_slide">
+		            <div class="ti_content">
+		                <div class="ti_news"><a href="#"><span>11:00</span> US fisherman rescued by tanker after 66 days lost at sea</a></div>
+						<div class="ti_news"><a href="#"><span>12:00</span> Overseas aid must rise by £1bn in next two years, says Europe</a></div>
+						<div class="ti_news"><a href="#"><span>13:00</span> Muslim population looks likely to double in size </a></div>
+						<div class="ti_news"><a href="#"><span>15:00</span> Heathrow cuts passenger levy to boost domestic flights</a></div>
+						<div class="ti_news"><a href="#"><span>16:00</span> Couple plotted to sell their new baby online for €5,000 </a></div>
+		            </div>
+		        </div>
+		    </div>
+	    </div>
+	    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	    <script src="libs/jquery.tickerNews.min.js"></script>
+	    <script type="text/javascript">
+	    	$(function(){
+	    		var timer = !1;
+				_Ticker = $("#T1").newsTicker();
+				_Ticker.on("mouseenter",function(){
+					var __self = this;
+					timer = setTimeout(function(){
+						__self.pauseTicker();
+					},200);
+				});
+				_Ticker.on("mouseleave",function(){
+					clearTimeout(timer);
+					if(!timer) return !1;
+					this.startTicker();
+				});
+			});
+	    </script>
+    </body>
+</html>
