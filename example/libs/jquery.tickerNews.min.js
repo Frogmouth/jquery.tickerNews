@@ -65,15 +65,13 @@
 				$old = $();
 
 			if(width_content < wrapper_width){
-				var x = Math.ceil(width_content/wrapper_width);
-				for (var i = 0; i < x; i++) {
-					$contentTicker.append($contentTicker.children().clone());
+				var x = Math.ceil(wrapper_width/width_content),
+					$clone = $contentTicker.children().clone();
+				for (var i = 1; i <= x; i++) {
+					$contentTicker.append($clone.clone());
 				}
 				if(!opt.itemWidth || opt.itemWidth == "auto"){
-					width_content = 0;
-					$contentTicker.children().each(function(){
-						width_content += $(this).width();
-					});
+					width_content = width_content*i;
 				}else{
 					width_content = ($contentTicker.children().length * opt.itemWidth);
 				}
