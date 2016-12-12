@@ -9,7 +9,7 @@
 			},
 			itemWidth : "auto",
 			ticker : ".ti_news",
-			tickerColne : "ti_clone",
+			tickerClone : "ti_clone",
 			wrapper : ".ti_wrapper",
 			slide : ".ti_slide",
 			content : ".ti_content",
@@ -79,8 +79,8 @@
 
 			if(width_content * 3 > $ti_slide.width()) $ti_slide.width((width_content*3)+100);
 
-			$ti_slide.append($contentTicker.clone().addClass(opt.tickerColne));
-			$ti_slide.append($contentTicker.clone().addClass(opt.tickerColne));
+			$ti_slide.append($contentTicker.clone().addClass(opt.tickerClone));
+			$ti_slide.append($contentTicker.clone().addClass(opt.tickerClone));
 
 			var $contentTickers = $Ticker.find(opt.content);
 				$contentTickers.width(width_content);
